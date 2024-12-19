@@ -4,8 +4,8 @@
             <img src="/images/logo_c.png" alt="Logo Botica" class="logo" @click="$router.push('/admin-dashboard')" style="cursor: pointer;">
             
             <nav class="dashboard-nav">
-                <button @click="$router.push({ path: '/admin-dashboard/vendedores' })">Ver Vendedores</button>
-                <button @click="$router.push({ path: '/admin-dashboard/laboratorios' })">Ver Laboratorios</button>
+                <button @click="$router.push({ path: '/admin-dashboard/vendedores' })">Vendedores</button>
+                <button @click="$router.push({ path: '/admin-dashboard/laboratorios' })">Proveedores</button>
                 <button @click="$router.push({ path: '/admin-dashboard/generar-reportes' })">Generar Reportes</button>
                  <!--<button @click="showMessage('ajustarStock')">Ajustar Stock</button>-->
             </nav>
@@ -71,12 +71,12 @@
         <!-- Segunda cabecera para los botones adicionales -->
         <header class="sub-header">
             <button @click="$router.push({ path: '/admin-dashboard/registrar-venta' })"><span class="key-button">F4</span>
-                Realizar Venta</button>
+                Vender</button>
             <button @click="$router.push({ path: '/admin-dashboard/registrar-compra' })"><span class="key-button">F5</span>
-                Registrar Compra</button>
+                Comprar Productos</button>
             <!--<button @click="showMessage('listaMedicamentos')">Lista de Medicamentos</button>-->
             <button @click="$router.push({ path: '/admin-dashboard/medicamentos' })"><span class="key-button">F6</span>
-                Lista de Medicamentos</button>
+                Productos Disponibles</button>
         </header>
 
         <main class="dashboard-content">
