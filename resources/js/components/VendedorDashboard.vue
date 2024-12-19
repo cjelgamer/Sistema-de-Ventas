@@ -204,7 +204,8 @@ export default {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(166, 33, 3, 0.1);
+    border: 1px solid rgba(166, 33, 3, 0.1);
     height: fit-content;
 }
 

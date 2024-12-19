@@ -1,6 +1,6 @@
 <template>
   <div class="generar-reportes p-4">
-    <h2 class="text-lg font-bold mb-4">Panel de Reportes</h2>
+    <h2 class="title">Panel de Reportes</h2>
     
     <!-- Grid superior -->
     <div class="grid grid-cols-12 gap-4 mb-4">
@@ -343,6 +343,14 @@ export default {
 </script>
 
 <style scoped>
+
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+  }
+
 .transition {
   transition: all 0.3s ease;
 }

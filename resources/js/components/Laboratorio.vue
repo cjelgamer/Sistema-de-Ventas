@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="data-table-container">
       <h2 class="title">Proveedores</h2>
   
       <!-- Tabla de Vendedores -->

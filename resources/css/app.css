@@ -32,6 +32,54 @@ body {
     background-size: 55px 55px;
 }
 
+
+@layer components {
+    .soft-container {
+      @apply bg-white rounded-2xl p-6;
+      box-shadow: 0 10px 20px rgba(166, 33, 3, 0.1);
+      border: 1px solid rgba(166, 33, 3, 0.1);
+    }
+  
+    .soft-container-hover {
+      @apply transition-all duration-300 ease-in-out;
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(166, 33, 3, 0.15);
+      }
+    }
+  
+    .content-section {
+      @apply bg-white rounded-2xl p-6 mb-6;
+      box-shadow: 0 10px 20px rgba(166, 33, 3, 0.1);
+      border: 1px solid rgba(166, 33, 3, 0.1);
+    }
+  
+    .form-container {
+      @apply bg-white rounded-2xl p-8 max-w-2xl mx-auto my-8;
+      box-shadow: 0 10px 20px rgba(166, 33, 3, 0.1);
+      border: 1px solid rgba(166, 33, 3, 0.1);
+    }
+  
+    .data-table-container {
+      @apply bg-white rounded-2xl p-6 overflow-hidden;
+      box-shadow: 0 10px 20px rgba(166, 33, 3, 0.1);
+      border: 1px solid rgba(166, 33, 3, 0.1);
+    }
+  
+    .card {
+      @apply bg-white rounded-xl p-4;
+      box-shadow: 0 4px 6px rgba(166, 33, 3, 0.1);
+      border: 1px solid rgba(166, 33, 3, 0.1);
+    }
+
+    .perfil-content {
+        @apply bg-white rounded-2xl p-8 max-w-2xl mx-auto my-8;
+        box-shadow: 0 10px 20px rgba(166, 33, 3, 0.1);
+        border: 1px solid rgba(166, 33, 3, 0.1);
+      }
+    
+  }
+
 #app {
     min-height: 100vh;
     display: flex;

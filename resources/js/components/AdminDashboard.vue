@@ -28,7 +28,7 @@
                 </button>
                 <iframe 
                     v-if="showPlayer"
-                    src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0" 
+                    src="https://open.spotify.com/embed/playlist/0fFHdocDh14tvtPXlJ8mXs?utm_source=generator&theme=0" 
                     width="300" 
                     height="80" 
                     frameBorder="0" 
@@ -105,6 +105,7 @@
 
         <main class="dashboard-content">
             <!-- Mostrar esta sección solo si no estamos en la ruta "Vendedores" -->
+
             <section class="main-section" v-if="$route.name !== 'Vendedores' && 
                                  $route.name !== 'Laboratorios' && 
                                  $route.name !== 'Medicamento' && 
@@ -112,18 +113,23 @@
                                  $route.name !== 'RegistrarVenta' && 
                                  $route.name !== 'PerfilVendedor'&& 
                                  $route.name !== 'GenerarReportes'"  >
+
+                <Calculator/>                 
                 <div class="action-container">
                     <div class="action-icon" @click="openModal('publicarMedicamento')">
                         <img src="/images/publish_icon.png" alt="Publicar Medicamento" class="icon-image" />
-                        <p>Publicar un Medicamento</p>
+                        <p>Publicar un Producto</p>
                     </div>
                     <div class="action-icon" @click="showMessage('entrevistasContratos')">
                         <img src="/images/contracts_icon.png" alt="Entrevistas y Contratos" class="icon-image" />
                         <p>Entrevistas y Contratos</p>
                     </div>
                 </div>
-                <button class="publish-button" @click="openModal('publicarMedicamento')">Publicar un Medicamento</button>
+                <button class="publish-button" @click="openModal('publicarMedicamento')">Publicar un Producto</button>
             </section>
+
+
+
 
             <!-- Área principal para cargar el componente de "Vendedores" -->
             <section class="main-section" v-if="$route.name === 'Vendedores'">
@@ -180,10 +186,12 @@
 
 
 <script>
+import Calculator from '@/components/Calculadora.vue';
 import FormularioMedicamento from '@/components/FormularioMedicamento.vue';  // Usando alias '@' para acceder a 'src/components'
 export default {
     
     components: {
+        Calculator,
         FormularioMedicamento
     },
 
@@ -494,8 +502,10 @@ export default {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(166, 33, 3, 0.1);
+    border: 1px solid rgba(166, 33, 3, 0.1);
     height: fit-content;
+
 }
 
 .faq-section h3 {
@@ -730,4 +740,5 @@ export default {
     max-height: 80px;
     background-color: #282828;
 }
+
 </style>

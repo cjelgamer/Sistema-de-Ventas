@@ -14,6 +14,7 @@ import RegistrarVenta from './components/Registrarventa.vue';
 import GenerarReportes from './components/GenerarReportes.vue';
 import VendedorDashboard from "/resources/js/components/VendedorDashboard.vue";
 import MedicamentoVendedor from './components/MedicamentoVendedor.vue';
+import Calculator from '@/components/Calculadora.vue';
 // Configuración global de axios
 /*axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.withCredentials = true; 
