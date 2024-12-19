@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <h2 class="title">Lista de laboratorios</h2>
+      <h2 class="title">Proveedores</h2>
   
       <!-- Tabla de Vendedores -->
       <div class="table-container">
@@ -214,6 +214,7 @@
   .title {
     font-size: 2em;
     font-weight: bold;
+    text-align: center;
   }
   
   /* Estilos del toggle switch */
@@ -251,6 +252,7 @@
   input:checked + .slider {
     background-color: #4caf50;
   }
+  
   input:checked + .slider:before {
     transform: translateX(14px);
   }
@@ -401,7 +403,7 @@
 
 
   .add-button {
-  background-color: #4caf50;
+  background-color: #A62103;
   color: white;
   padding: 10px 20px;
   border: none;

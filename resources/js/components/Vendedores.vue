@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="title">Lista de Vendedores</h2>
+    <h2 class="title">Vendedores</h2>
 
     <!-- Tabla de Vendedores -->
     <div class="table-container">
@@ -238,6 +238,7 @@ export default {
 .title {
   font-size: 2em;
   font-weight: bold;
+  text-align: center;
 }
 
 /* Estilos del toggle switch */
@@ -437,7 +438,7 @@ input, select {
 }
 
 .add-button {
-  background-color: #4caf50;
+  background-color: #A62103;
   color: white;
   padding: 10px 20px;
   border: none;

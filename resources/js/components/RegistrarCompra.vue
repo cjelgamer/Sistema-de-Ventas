@@ -472,6 +472,8 @@ export default {
 </script>
 
 <style scoped>
+
+
 .container {
   overflow-x: hidden;
   max-width: 100%;
@@ -486,7 +488,7 @@ export default {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 20px;
+  font-size: 2em;
   font-weight: bold;
 }
 
@@ -513,8 +515,8 @@ export default {
 .input-field:focus,
 .select-field:focus {
   outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: #A62103;
+  box-shadow: 0 0 0 3px rgba(255, 120, 120, 0.1);
 }
 
 .select-container {
@@ -538,7 +540,7 @@ export default {
   cursor: pointer;
   font-size: 13px;
   border-radius: 0.5em;
-  background: #c8ead5;
+  background: #ffe7e2;
   border: 1px solid #e8e8e8;
   box-shadow: 6px 6px 12px #ffffff, -6px -6px 12px #ffffff;
 }
@@ -550,8 +552,8 @@ export default {
 
 .add-button:hover {
   color: #ffffff;
-  border: 1px solid #45a049;
-  background-color: #45a049;
+  border: 1px solid #a5432c;
+  background-color: #A62103;
 }
 
 .add-icon {

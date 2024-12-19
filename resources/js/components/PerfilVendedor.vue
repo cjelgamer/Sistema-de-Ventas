@@ -2,10 +2,10 @@
     <div class="dashboard-perfil-container">
       <div class="perfil-content bg-white rounded-lg shadow-lg p-6">
         <!-- Header del perfil -->
-        <div class="profile-header text-center mb-6">
+        <div class="profile-header text-center mb-2">
           <div class="avatar-container mb-4">
             <div class="relative inline-block">
-              <i class="fas fa-user-circle text-7xl text-gray-700 hover:text-gray-800 transition-colors"></i>
+              <i class="fas fa-user-circle text-9xl text-gray-700 hover:text-gray-800 transition-colors"></i>
               <span class="status-indicator" :class="{ 'bg-green-500': vendedorData.estado === 'Activo', 'bg-red-500': vendedorData.estado !== 'Activo' }"></span>
             </div>
           </div>
@@ -15,7 +15,6 @@
   
         <!-- Información principal -->
         <div class="bg-gray-50 rounded-lg p-4 mb-6">
-          <h3 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Información Personal</h3>
           <div class="space-y-4">
             <div class="info-row">
               <div class="info-label">

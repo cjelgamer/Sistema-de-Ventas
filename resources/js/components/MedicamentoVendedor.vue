@@ -86,6 +86,14 @@
   </script>
   
   <style scoped>
+
+.title {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+
   .search-container {
     display: flex;
     justify-content: space-between;

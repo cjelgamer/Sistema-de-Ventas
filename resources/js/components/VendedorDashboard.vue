@@ -1,5 +1,5 @@
 <template>
-    <div class="dashboard">
+    <div class="dashboard flex flex-col min-h-screen">
         <header class="dashboard-header">
             <img src="/images/logo_c.png" alt="Logo Botica" class="logo" @click="$router.push('/vendedor-dashboard')" style="cursor: pointer;">
             <nav class="dashboard-nav">
@@ -134,10 +134,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #fff;
     padding: 10px 20px;
     color: #333;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-header .dashboard-nav {
@@ -157,9 +155,9 @@ export default {
     border-radius: 5px;
 }
 
-.dashboard-header .dashboard-nav button:hover {
-    background-color: rgba(76, 175, 80, 0.1);
-    color: #4CAF50;
+.dashboard-header .dashboard-nav button:not(.active):hover {
+    background-color: rgba(220, 220, 220, 0.681);
+    color: #000;
 }
 
 .logo {
@@ -180,14 +178,13 @@ export default {
 }
 
 .user-options i:hover {
-    color: #4CAF50;
+    color: #A62103;
     transform: scale(1.1);
 }
 
 .dashboard-content {
     display: flex;
     padding: 20px;
-    background-color: #f4f4f4;
     height: calc(100vh - 80px);
     overflow: hidden;
 }
@@ -216,7 +213,7 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: #333;
-    border-bottom: 2px solid #4CAF50;
+    border-bottom: 2px solid #A62103;
     padding-bottom: 8px;
 }
 
@@ -234,7 +231,7 @@ export default {
 }
 
 .faq-section ul li:hover {
-    background-color: rgba(76, 175, 80, 0.1);
+    background-color: rgba(210, 210, 210, 0.681);
 }
 
 .faq-section ul li a {
@@ -245,7 +242,7 @@ export default {
 }
 
 .faq-section ul li a:hover {
-    color: #4CAF50;
+    color: #A62103;
 }
 
 @media (max-width: 768px) {

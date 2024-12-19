@@ -1,5 +1,6 @@
 <template>
   <div class="form-container">
+    <h2 class="title">Realizar Venta</h2>
     <!-- Header con título y saldo -->
     <div class="header-section">
       <div class="saldo-display">
@@ -753,6 +754,14 @@ export default {
 </script>
 
 <style scoped>
+
+.title {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+
 .form-container {
   max-width: 1400px;
   margin: 0 auto;

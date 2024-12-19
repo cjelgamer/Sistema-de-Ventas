@@ -35,7 +35,7 @@
                 <button 
                     type="submit" 
                     class="text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" 
-                    style="background-color: #00A859;">
+                    style="background-color: #A62103;">
                     Iniciar sesión
                 </button>
             </form>
@@ -173,14 +173,14 @@ export default {
 .form__field:focus {
     padding-bottom: 6px;
     border-width: 3px;
-    border-image: linear-gradient(to right, #00A859, #38caef);
+    border-image: linear-gradient(to right, #A62103, #F2C744);
     border-image-slice: 1;
 }
 
 .form__field:focus ~ .form__label {
     top: 0;
     font-size: 17px;
-    color: #00A859;
+    color: #F2C744;
     font-weight: 700;
 }
 

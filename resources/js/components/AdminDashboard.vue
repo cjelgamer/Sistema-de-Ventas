@@ -1,5 +1,5 @@
 <template>
-    <div class="dashboard">
+    <div class="dashboard flex flex-col min-h-screen">
         <header class="dashboard-header">
             <img src="/images/logo_c.png" alt="Logo Botica" class="logo" @click="$router.push('/admin-dashboard')" style="cursor: pointer;">
             
@@ -37,6 +37,30 @@
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy"
                     class="spotify-iframe"
+                ></iframe>
+            </div>
+
+            <div class="radio-player">
+                <button @click="toggleRadio" class="player-toggle">
+                    <span class="svgContainer">
+                        <svg
+                            viewBox="0 0 24 24"
+                            height="1.6em"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="#ff4b4b"
+                        >
+                            <path d="M3.24 6.15C2.51 6.43 2 7.17 2 8v12c0 1.1.89 2 2 2h16c1.11 0 2-.9 2-2V8c0-1.11-.89-2-2-2H8.3l8.26-3.34L15.88 1 3.24 6.15zM7 20c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-8h-2v-2h-2v2H4V8h16v4z"/>
+                        </svg>
+                    </span>
+                </button>
+                <iframe 
+                    v-if="showRadio"
+                    src="https://radio.rpp.pe/player/17"
+                    width="300" 
+                    height="80" 
+                    frameborder="0"
+                    class="radio-iframe"
+                    allow="autoplay"
                 ></iframe>
             </div>
 
@@ -141,6 +165,7 @@
                     <li>¿Cómo empiezo?</li>
                     <li><a href="#">Más &gt;</a></li>
                 </ul>
+
             </aside>
         </main>
 
@@ -168,7 +193,8 @@ export default {
             isDropdownOpen: false,
             modalOpen: false,  // Estado para controlar la visibilidad del modal
             medicamento: null,
-            medicamentos: []         // Aquí puedes almacenar el medicamento que se está publicando
+            medicamentos: [],
+            showRadio: false,         // Aquí puedes almacenar el medicamento que se está publicando
         };
     },
 
@@ -185,6 +211,10 @@ export default {
     // Método para abrir el modal
     togglePlayer() {
       this.showPlayer = !this.showPlayer;
+    },
+
+    toggleRadio() {
+        this.showRadio = !this.showRadio;
     },
 
     handleKeyPress(event) {
@@ -280,13 +310,13 @@ export default {
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
+    /* No se aplica background aquí */
 }
 
 .dashboard-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #fff;
     padding: 10px 20px;
     color: #333;
 }
@@ -310,14 +340,14 @@ export default {
 }
 
 .dashboard-header .dashboard-nav button.active {
-    background-color: #4CAF50;
+    background-color: #A62103;
     color: white;
-    box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+    box-shadow: 0 2px 4px rgba(155, 155, 155, 0.681);
 }
 
 .dashboard-header .dashboard-nav button:not(.active):hover {
-    background-color: rgba(76, 175, 80, 0.1);
-    color: #4CAF50;
+    background-color: rgba(220, 220, 220, 0.681);
+    color: #000;
 }
 
 .sub-header {
@@ -341,19 +371,19 @@ export default {
 }
 
 .sub-header button.active {
-    background-color: #4CAF50;
+    background-color: #A62103;
     color: white;
     opacity: 1;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .sub-header button:not(.active):hover {
-    background-color: rgba(76, 175, 80, 0.2);
+    background-color: rgba(155, 155, 155, 0.681);
     opacity: 1;
 }
 
 .publish-button {
-  background-color: #4caf50;
+  background-color: #A62103;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -389,14 +419,13 @@ export default {
 }
 
 .user-options i:hover {
-    color: #4CAF50;
+    color: #A62103;
     transform: scale(1.1);
 }
 
 .dashboard-content {
     display: flex;
     padding: 20px;
-    background-color: #f4f4f4;
     height: calc(100vh - 120px);
     overflow: hidden;
 }
@@ -455,13 +484,13 @@ export default {
 }
 
 .publish-button:hover {
-    background-color: #4CAF50;
+    background-color: #A62103;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
 }
 
 .faq-section {
-    width: 200px;
+    width: 300px;
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -474,7 +503,7 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: #333;
-    border-bottom: 2px solid #4CAF50;
+    border-bottom: 2px solid #A62103;
     padding-bottom: 8px;
 }
 
@@ -492,7 +521,7 @@ export default {
 }
 
 .faq-section ul li:hover {
-    background-color: rgba(76, 175, 80, 0.1);
+    background-color: rgba(210, 210, 210, 0.681);
 }
 
 .faq-section ul li a {
@@ -503,7 +532,7 @@ export default {
 }
 
 .faq-section ul li a:hover {
-    color: #4CAF50;
+    color: #A62103;
 }
 
 @media (max-width: 768px) {
@@ -687,4 +716,18 @@ export default {
     gap: 10px;
 }
 
+
+.radio-player {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 15px;
+}
+
+.radio-iframe {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-height: 80px;
+    background-color: #282828;
+}
 </style>

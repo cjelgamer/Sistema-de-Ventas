@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="title">Lista de Medicamentos</h2>
+    <h2 class="title">Productos</h2>
 
     <!-- Barra de búsqueda -->
     <div class="search-container">
@@ -188,6 +188,14 @@ export default {
 
 <style scoped>
 /* Estilos para la barra de búsqueda */
+
+.title {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+
 .search-container {
   display: flex;
   justify-content: space-between;
@@ -395,7 +403,7 @@ input, select {
 }
 
 .add-button {
-  background-color: #4caf50;
+  background-color: #A62103;
   color: white;
   padding: 10px 20px;
   border: none;
