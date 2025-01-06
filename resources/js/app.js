@@ -14,6 +14,7 @@ import RegistrarVenta from './components/Registrarventa.vue';
 import GenerarReportes from './components/GenerarReportes.vue';
 import VendedorDashboard from "/resources/js/components/VendedorDashboard.vue";
 import MedicamentoVendedor from './components/MedicamentoVendedor.vue';
+import Cliente from './components/Cliente.vue';
 import Calculator from '@/components/Calculadora.vue';
 // Configuración global de axios
 /*axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -45,7 +46,8 @@ const routes = [
             { path: 'registrar-compra', name: 'RegistrarCompra', component: RegistrarCompra },
             { path: 'registrar-venta', name: 'RegistrarVenta', component: RegistrarVenta },
             { path: 'perfil', name: 'PerfilVendedor', component: PerfilVendedor },
-            { path: 'generar-reportes', name: 'GenerarReportes', component: GenerarReportes }
+            { path: 'generar-reportes', name: 'GenerarReportes', component: GenerarReportes },
+            { path: 'clientes', name: 'Clientes', component: Cliente },
         ]
     },
 

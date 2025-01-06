@@ -7,7 +7,7 @@
         <i class="fas fa-cash-register saldo-icon"></i>
         <span class="saldo-label">Caja Hoy:</span>
         <div class="saldo-monto">
-          <i class="fas fa-money-bill-wave saldo-icon"></i> <!-- Icono de billete -->
+          <i class="fas fa-money-bill-wave saldo-icon"></i>
           S/. {{ saldoCaja.toFixed(2) }}
         </div>
       </div>
@@ -27,9 +27,6 @@
               :max="fechaActual"
             />
           </div>
-          <!--<button @click="cargarVentas" class="btn-refresh">
-            <i class="fas fa-sync-alt"></i> Actualizar
-          </button>-->
         </div>
       </div>
 
@@ -39,7 +36,6 @@
             <tr>
               <th>Nro Venta</th>
               <th>Fecha</th>
-              <!--<th>Cliente</th>-->
               <th>Tipo Pago</th>
               <th>Total</th>
               <th>Acciones</th>
@@ -50,14 +46,6 @@
               <tr>
                 <td>{{ venta.id }}</td>
                 <td>{{ formatearFecha(venta.fecha) }}</td>
-                <!--<td>
-                  <span v-if="venta.cliente">
-                    {{ venta.cliente.nombre }} {{ venta.cliente.apellido_pat }}
-                    <br>
-                    <small>DNI: {{ venta.cliente.dni || 'Cliente General' }}</small>
-                  </span>
-                  <span v-else>Cliente General</span>
-                </td>-->
                 <td>
                   <span :class="'tipo-pago-' + venta.tipo_pago.toLowerCase()">
                     {{ venta.tipo_pago }}
@@ -84,7 +72,7 @@
       <div class="cliente-grid">
         <div class="dni-container">
           <label for="dni-input">
-            <i class="fas fa-id-card dni-icon"></i> DNI Cliente:
+            <i class="fas fa-id-card dni-icon"></i> DNI/RUC:
           </label>
           <div class="search-group">
             <input 
@@ -93,15 +81,20 @@
               @keyup.enter="buscarCliente"
               type="text" 
               class="search-input"
-              placeholder="Ingrese DNI"
+              placeholder="Ingrese DNI o RUC"
+              :maxlength="11"
+              @input="validarDocumento"
             />
-            <button @click="buscarCliente" class="search-btn">
+            <button @click="buscarCliente" class="search-btn" :disabled="!documentoValido">
               <i class="fas fa-search"></i> Buscar
             </button>
             <button @click="usarClienteGeneral" class="btn-general">
               <span class="key-button">F2</span>
               <i class="fas fa-users"></i> Cliente General
             </button>
+          </div>
+          <div v-if="!documentoValido && cliente.DNI" class="documento-hint">
+            El documento debe tener 8 dígitos (DNI) u 11 dígitos (RUC)
           </div>
         </div>
 
@@ -145,15 +138,15 @@
     </div>
 
     <div v-if="loading" class="loader-overlay">
-        <div class="loader">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
+    </div>
 
     <!-- Sección Venta -->
     <div v-if="mostrarVenta" class="venta-section">
@@ -271,7 +264,6 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      // Propiedades existentes
       cliente: {
         DNI: '',
         Nombre: '',
@@ -292,13 +284,13 @@ export default {
       ventaCompletada: false,
       ultimaVentaId: null,
       clienteGeneral: false,
-
-      // Nuevas propiedades para el historial
       ventas: [],
       detallesAbiertos: null,
       filtroFecha: this.getFechaActual(),
       fechaActual: this.getFechaActual(),
-      loading: false
+      loading: false,
+      documentoValido: false,
+      tipoDocumento: 'dni'
     }
   },
 
@@ -324,7 +316,18 @@ export default {
   },
 
   methods: {
-    // Nuevos métodos para el historial
+    validarDocumento() {
+      // Limpiar caracteres no numéricos
+      this.cliente.DNI = this.cliente.DNI.replace(/[^0-9]/g, '');
+      const longitud = this.cliente.DNI.length;
+      
+      // Validar longitud (8 para DNI, 11 para RUC)
+      this.documentoValido = longitud === 8 || longitud === 11;
+      
+      // Determinar tipo de documento
+      this.tipoDocumento = longitud === 11 ? 'ruc' : 'dni';
+    },
+
     async cargarVentas() {
       try {
         const response = await axios.get('/ventas/historial')
@@ -338,7 +341,7 @@ export default {
     },
 
     handleKeyPress(event) {
-      if (this.loading) return; // Evitar acciones mientras se carga
+      if (this.loading) return;
       if (event.key === "F2") {
         event.preventDefault();
         this.usarClienteGeneral();
@@ -348,11 +351,10 @@ export default {
           const searchInput = this.$refs.medicamentoSearch;
           if (searchInput) {
             searchInput.focus();
-            this.filtrarMedicamentos(); // Llamar explícitamente
+            this.filtrarMedicamentos();
           }
         }
-      }
-      else if (event.key === "Control") {  // Agregar manejo de Ctrl
+      } else if (event.key === "Control") {
         event.preventDefault();
         if (this.mostrarVenta && !this.ventaCompletada && this.medicamentosSeleccionados.length > 0) {
           this.finalizarVenta();
@@ -364,14 +366,12 @@ export default {
       this.detallesAbiertos = this.detallesAbiertos === ventaId ? null : ventaId
     },
 
-    // Método para obtener la fecha actual en la zona horaria de Lima
     getFechaActual() {
-    const fecha = new Date();
-    fecha.setHours(fecha.getHours() - 5); // Ajuste manual para UTC-5 (Lima)
-    return fecha.toISOString().split('T')[0];
-},
+      const fecha = new Date();
+      fecha.setHours(fecha.getHours() - 5);
+      return fecha.toISOString().split('T')[0];
+    },
 
-    // Actualizamos el método formatearFecha para que use la zona horaria de Lima
     formatearFecha(fecha) {
       const fechaObj = new Date(fecha + 'T00:00:00');
       return fechaObj.toLocaleDateString('es-PE', {
@@ -382,12 +382,10 @@ export default {
       });
     },
 
-    // Si hay algún método que actualice las fechas, también debería usar getFechaActual
     actualizarFechas() {
       this.filtroFecha = this.getFechaActual();
       this.fechaActual = this.getFechaActual();
     },
-
 
     async reimprimirTicket(ventaId) {
       try {
@@ -410,7 +408,71 @@ export default {
       }
     },
 
-    // Método existente modificado para actualizar el historial
+    async buscarCliente() {
+      if (!this.cliente.DNI) {
+        alert('Por favor ingrese un número de documento')
+        return
+      }
+
+      if (this.cliente.DNI === '0') {
+        await this.usarClienteGeneral()
+        return
+      }
+
+      if (!this.documentoValido) {
+        alert(`Por favor ingrese un ${this.tipoDocumento === 'dni' ? 'DNI válido de 8 dígitos' : 'RUC válido de 11 dígitos'}`)
+        return
+      }
+
+      this.loading = true
+      try {
+        const response = await axios.get(`/clientes/buscar/${this.cliente.DNI}`)
+        
+        if (response.data.success) {
+          const clienteData = response.data.cliente
+          this.cliente = {
+            DNI: clienteData.DNI,
+            Nombre: clienteData.Nombre,
+            Apellido_Pat: clienteData.Apellido_Pat,
+            Apellido_Mat: clienteData.Apellido_Mat,
+            ID: clienteData.ID
+          }
+          this.clienteEncontrado = true
+          this.mostrarVenta = true
+          this.clienteGeneral = false
+        } else {
+          this.clienteEncontrado = false
+          this.clienteGeneral = false
+          this.cliente = {
+            DNI: this.cliente.DNI,
+            Nombre: '',
+            Apellido_Pat: '',
+            Apellido_Mat: '',
+            ID: null
+          }
+        }
+        this.mostrarFormCliente = true
+      } catch (error) {
+        console.error('Error al buscar cliente:', error)
+        this.clienteEncontrado = false
+        this.clienteGeneral = false
+        this.mostrarFormCliente = true
+        if (error.response?.status === 404) {
+          this.cliente = {
+            DNI: this.cliente.DNI,
+            Nombre: '',
+            Apellido_Pat: '',
+            Apellido_Mat: '',
+            ID: null
+          }
+        } else {
+          alert(error.response?.data?.message || 'Error al buscar cliente')
+        }
+      } finally {
+        this.loading = false
+      }
+    },
+
     async finalizarVenta() {
       if (this.medicamentosSeleccionados.length === 0) {
         alert('Agregue al menos un medicamento a la venta')
@@ -443,12 +505,11 @@ export default {
           if (detallesResponse.data.success) {
             setTimeout(() => {
               this.obtenerSaldoCaja();
-              this.cargarVentas(); // Actualizamos el historial
+              this.cargarVentas();
             }, 1000)
             this.ventaCompletada = true
             this.medicamentosSeleccionados = []
             this.totalVenta = 0
-            //alert('Venta realizada con éxito')
           }
         } else {
           throw new Error('Error al crear la venta')
@@ -459,10 +520,9 @@ export default {
       }
     },
 
-    // Resto de métodos existentes sin cambios
     async usarClienteGeneral() {
-      if (this.loading) return; // Evitar múltiples llamadas simultáneas
-      this.loading = true; // Activar el loader
+      if (this.loading) return;
+      this.loading = true;
       try {
         const response = await axios.get('/clientes/general');
         
@@ -505,109 +565,68 @@ export default {
         console.error('Error al obtener cliente general:', error);
         alert('Error al procesar cliente general');
       } finally {
-        this.loading = false; // Desactivar el loader
-      }
-    },
-
-    async buscarCliente() {
-      if (!this.cliente.DNI) {
-        alert('Por favor ingrese un DNI')
-        return
-      }
-
-      if (this.cliente.DNI === '0') {
-        await this.usarClienteGeneral()
-        return
-      }
-      
-      try {
-        const response = await axios.get(`/clientes/buscar/${this.cliente.DNI}`)
-        
-        if (response.data.success) {
-          const clienteData = response.data.cliente
-          this.cliente = {
-            DNI: clienteData.DNI,
-            Nombre: clienteData.Nombre,
-            Apellido_Pat: clienteData.Apellido_Pat,
-            Apellido_Mat: clienteData.Apellido_Mat,
-            ID: clienteData.ID
-          }
-          this.clienteEncontrado = true
-          this.mostrarVenta = true
-          this.clienteGeneral = false
-        } else {
-          this.clienteEncontrado = false
-          this.clienteGeneral = false
-          this.cliente = {
-            DNI: this.cliente.DNI,
-            Nombre: '',
-            Apellido_Pat: '',
-            Apellido_Mat: '',
-            ID: null
-          }
-        }
-        this.mostrarFormCliente = true
-      } catch (error) {
-        console.error('Error al buscar cliente:', error)
-        this.clienteEncontrado = false
-        this.clienteGeneral = false
-        this.mostrarFormCliente = true
-        if (error.response?.status === 404) {
-          this.cliente = {
-            DNI: this.cliente.DNI,
-            Nombre: '',
-            Apellido_Pat: '',
-            Apellido_Mat: '',
-            ID: null
-          }
-        } else {
-          alert('Error al buscar cliente')
-        }
+        this.loading = false;
       }
     },
 
     async continuarAVenta() {
-      if (!this.clienteEncontrado && !this.clienteGeneral) {
-        if (!this.cliente.DNI || !this.cliente.Nombre || 
-            !this.cliente.Apellido_Pat || !this.cliente.Apellido_Mat) {
-          alert('Por favor complete todos los campos del cliente')
-          return
-        }
+  if (!this.clienteEncontrado && !this.clienteGeneral) {
+    // Si es RUC, solo validar DNI y Nombre (razón social)
+    const camposRequeridos = this.tipoDocumento === 'ruc' 
+      ? ['DNI', 'Nombre']
+      : ['DNI', 'Nombre', 'Apellido_Pat', 'Apellido_Mat'];
 
-        try {
-          const response = await axios.post('/clientes', {
-            DNI: this.cliente.DNI,
-            Nombre: this.cliente.Nombre,
-            Apellido_Pat: this.cliente.Apellido_Pat,
-            Apellido_Mat: this.cliente.Apellido_Mat
-          })
-          
-          if (response.data.success && response.data.cliente) {
-            this.cliente = {
-              ...response.data.cliente,
-              ID: response.data.cliente.ID
-            }
-            this.clienteEncontrado = true
-          } else {
-            throw new Error('La respuesta del servidor no contiene los datos esperados')
-          }
-          
-        } catch (error) {
-          console.error('Error completo:', error)
-          console.error('Response data:', error.response?.data)
-          alert('Error al procesar el cliente: ' + (error.response?.data?.message || error.message))
-          return
-        }
-      }
+    const camposFaltantes = camposRequeridos.filter(campo => !this.cliente[campo]);
+        
+    if (camposFaltantes.length > 0) {
+      alert(`Por favor complete ${this.tipoDocumento === 'ruc' ? 'la razón social' : 'todos los campos del cliente'}`)
+      return
+    }
 
-      if (!this.cliente.ID) {
-        console.error('No hay ID de cliente después del proceso:', this.cliente)
-        alert('Error: No se pudo obtener el ID del cliente')
-        return
+    try {
+      const clienteData = {
+        DNI: this.cliente.DNI,
+        Nombre: this.cliente.Nombre
+      };
+
+      // Solo agregar apellidos si es DNI
+      if (this.tipoDocumento === 'dni') {
+        clienteData.Apellido_Pat = this.cliente.Apellido_Pat;
+        clienteData.Apellido_Mat = this.cliente.Apellido_Mat;
+      } else {
+        // Si es RUC, enviar apellidos vacíos
+        clienteData.Apellido_Pat = '';
+        clienteData.Apellido_Mat = '';
       }
       
-      this.mostrarVenta = true
-    },
+      const response = await axios.post('/clientes', clienteData);
+          
+      if (response.data.success && response.data.cliente) {
+        this.cliente = {
+          ...response.data.cliente,
+          ID: response.data.cliente.ID
+        }
+        this.clienteEncontrado = true;
+      } else {
+        throw new Error('La respuesta del servidor no contiene los datos esperados');
+      }
+          
+    } catch (error) {
+      console.error('Error completo:', error);
+      console.error('Response data:', error.response?.data);
+      alert('Error al procesar el cliente: ' + (error.response?.data?.message || error.message));
+      return;
+    }
+  }
+
+  if (!this.cliente.ID) {
+    console.error('No hay ID de cliente después del proceso:', this.cliente);
+    alert('Error: No se pudo obtener el ID del cliente');
+    return;
+  }
+      
+  this.mostrarVenta = true;
+},
 
     reiniciarFormulario() {
       this.cliente = {
@@ -626,30 +645,32 @@ export default {
       this.ventaCompletada = false
       this.ultimaVentaId = null
       this.clienteGeneral = false
+      this.documentoValido = false
+      this.tipoDocumento = 'dni'
     },
 
     async filtrarMedicamentos() {
-  if (!this.busquedaMedicamento || this.busquedaMedicamento.length < 2) {
-    this.medicamentosFiltrados = []
-    return
-  }
-
-  try {
-    const response = await axios.get('/medicamentos', {
-      params: { 
-        search: this.busquedaMedicamento,
-        limit: 10 // Opcional: limitar resultados
+      if (!this.busquedaMedicamento || this.busquedaMedicamento.length < 2) {
+        this.medicamentosFiltrados = []
+        return
       }
-    })
-    
-    if (response.data) {
-      this.medicamentosFiltrados = response.data.filter(med => med.Stock > 0)
-    }
-  } catch (error) {
-    console.error('Error al buscar medicamentos:', error)
-    this.medicamentosFiltrados = []
-  }
-},
+
+      try {
+        const response = await axios.get('/medicamentos', {
+          params: { 
+            search: this.busquedaMedicamento,
+            limit: 10
+          }
+        })
+        
+        if (response.data) {
+          this.medicamentosFiltrados = response.data.filter(med => med.Stock > 0)
+        }
+      } catch (error) {
+        console.error('Error al buscar medicamentos:', error)
+        this.medicamentosFiltrados = []
+      }
+    },
 
     seleccionarPrimerMedicamento() {
       if (this.medicamentosFiltrados.length > 0) {
@@ -658,24 +679,23 @@ export default {
     },
 
     seleccionarMedicamento(medicamento) {
-  const existe = this.medicamentosSeleccionados.find(m => m.ID === medicamento.ID)
-  if (!existe && medicamento.Stock > 0) {
-    this.medicamentosSeleccionados.push({
-      ...medicamento,
-      cantidad: 1
-    })
-    this.calcularTotal()
-  }
-  this.busquedaMedicamento = ''
-  this.medicamentosFiltrados = []
-  
-  // Mantener el foco en el input
-  this.$nextTick(() => {
-    if (this.$refs.medicamentoSearch) {
-      this.$refs.medicamentoSearch.focus()
-    }
-  })
-},
+      const existe = this.medicamentosSeleccionados.find(m => m.ID === medicamento.ID)
+      if (!existe && medicamento.Stock > 0) {
+        this.medicamentosSeleccionados.push({
+          ...medicamento,
+          cantidad: 1
+        })
+        this.calcularTotal()
+      }
+      this.busquedaMedicamento = ''
+      this.medicamentosFiltrados = []
+      
+      this.$nextTick(() => {
+        if (this.$refs.medicamentoSearch) {
+          this.$refs.medicamentoSearch.focus()
+        }
+      })
+    },
 
     ajustarCantidad(index, delta) {
       const med = this.medicamentosSeleccionados[index]
@@ -688,70 +708,73 @@ export default {
 
     eliminarMedicamento(index) {
       this.medicamentosSeleccionados.splice(index, 1)
-      this.calcularTotal()
+      this.calcularTotal
     },
 
-    calcularTotal() {
-      this.totalVenta = this.medicamentosSeleccionados.reduce(
-        (total, med) => total + (med.Precio * med.cantidad),
-        0
-      )
-    },
+calcularTotal() {
+  this.totalVenta = this.medicamentosSeleccionados.reduce(
+    (total, med) => total + (med.Precio * med.cantidad),
+    0
+  )
+},
 
-    async obtenerSaldoCaja() {
-      try {
-        const response = await axios.get('/caja/saldo-actual')
-        
-        if (response.data.success) {
-          const nuevoSaldo = parseFloat(response.data.saldo_final) || 0;
-          this.saldoCaja = nuevoSaldo;
-        } else {
-          console.log('Respuesta no exitosa:', response.data);
-        }
-      } catch (error) {
-        console.error('Error detallado:', {
-          mensaje: error.message,
-          respuesta: error.response?.data,
-          status: error.response?.status
-        });
-      }
-    },
+async obtenerSaldoCaja() {
+  try {
+    const response = await axios.get('/caja/saldo-actual')
+    
+    if (response.data.success) {
+      const nuevoSaldo = parseFloat(response.data.saldo_final) || 0;
+      this.saldoCaja = nuevoSaldo;
+    } else {
+      console.log('Respuesta no exitosa:', response.data);
+    }
+  } catch (error) {
+    console.error('Error detallado:', {
+      mensaje: error.message,
+      respuesta: error.response?.data,
+      status: error.response?.status
+    });
+  }
+},
 
-    handleVisibilityChange() {
-      if (document.visibilityState === 'visible') {
-        this.obtenerSaldoCaja()
-      }
-    },
+handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    this.obtenerSaldoCaja()
+  }
+},
 
-    async imprimirTicket() {
-      if (this.ultimaVentaId) {
-        try {
-          const response = await axios.get(`/ticket/${this.ultimaVentaId}`, {
-            responseType: 'blob'
-          });
-          
-          const blob = new Blob([response.data], { type: 'application/pdf' });
-          const url = window.URL.createObjectURL(blob);
-          
-          const link = document.createElement('a');
-          link.href = url;
-          link.target = '_blank';
-          link.click();
-          
-          window.URL.revokeObjectURL(url);
-        } catch (error) {
-          console.error('Error al generar ticket:', error);
-          alert('Error al generar el ticket');
-        }
-      }
-    },
-
-    nuevaVenta() {
-      this.reiniciarFormulario()
+async imprimirTicket() {
+  if (this.ultimaVentaId) {
+    try {
+      const response = await axios.get(`/ticket/${this.ultimaVentaId}`, {
+        responseType: 'blob'
+      });
+      
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.click();
+      
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error al generar ticket:', error);
+      alert('Error al generar el ticket');
     }
   }
+},
+
+nuevaVenta() {
+  this.reiniciarFormulario()
+}
+}
 }
 </script>
+
+
+
 
 <style scoped>
 

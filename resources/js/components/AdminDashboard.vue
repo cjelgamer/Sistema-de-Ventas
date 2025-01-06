@@ -6,6 +6,10 @@
             <nav class="dashboard-nav">
                 <button @click="$router.push({ path: '/admin-dashboard/vendedores' })">Vendedores</button>
                 <button @click="$router.push({ path: '/admin-dashboard/laboratorios' })">Proveedores</button>
+                <button @click="$router.push({ path: '/admin-dashboard/clientes' })" class="menu-button">
+                    <i class="fas fa-users mr-2"></i>
+                    Clientes
+                </button>
                 <button @click="$router.push({ path: '/admin-dashboard/generar-reportes' })">Generar Reportes</button>
                  <!--<button @click="showMessage('ajustarStock')">Ajustar Stock</button>-->
             </nav>
@@ -112,7 +116,8 @@
                                  $route.name !== 'RegistrarCompra' && 
                                  $route.name !== 'RegistrarVenta' && 
                                  $route.name !== 'PerfilVendedor'&& 
-                                 $route.name !== 'GenerarReportes'"  >
+                                 $route.name !== 'GenerarReportes'&&
+                                 $route.name !== 'Clientes'" >
 
                 <Calculator/>                 
                 <div class="action-container">
@@ -163,7 +168,12 @@
                 <router-view></router-view>
             </section>
 
-            <aside class="faq-section" v-if="!['Vendedores', 'Laboratorios', 'Medicamento', 'RegistrarCompra', 'RegistrarVenta', 'PerfilVendedor', 'GenerarReportes'].includes($route.name)">
+            <!-- Área principal para cargar el componente de "Clientes" -->
+            <section class="main-section" v-if="$route.name === 'Clientes'">
+                <router-view></router-view>
+            </section>
+
+            <aside class="faq-section" v-if="!['Vendedores', 'Laboratorios', 'Medicamento', 'RegistrarCompra', 'RegistrarVenta', 'PerfilVendedor', 'GenerarReportes', 'Clientes'].includes($route.name)">
                 <h3>Preguntas</h3>
                 <ul>
                     <li>¿Cómo sé que estoy protegido?</li>

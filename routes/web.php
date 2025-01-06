@@ -15,6 +15,7 @@ use App\Http\Controllers\DetalleSalidaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\ConsultaController;
 use App\Models\Medicamento;
 
 // Rutas públicas
@@ -120,6 +121,9 @@ Route::get('/caja/saldo-actual', [CajaController::class, 'getSaldoActual'])
 Route::get('/ticket/{salidaId}', [TicketController::class, 'generarTicket']);
 
 
+Route::get('/clientes', [ClienteController::class, 'index']);
+Route::put('/clientes/{id}', [ClienteController::class, 'update']);
+Route::delete('/clientes/{id}', [ClienteController::class, 'destroy']);
 
 });
 
