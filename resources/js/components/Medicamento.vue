@@ -403,7 +403,7 @@ input, select {
 }
 
 .add-button {
-  background-color: #A62103;
+  background-color: #0047AB;
   color: white;
   padding: 10px 20px;
   border: none;

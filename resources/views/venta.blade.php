@@ -83,10 +83,10 @@
 <body>
     <div class="contenedor">
         <div class="header">
-            <div class="empresa-nombre">SISFARMA</div>
+            <div class="empresa-nombre">ANDREATEX G&K S.A.C.</div>
             <div class="empresa-info">
-                RUC: 111111111<br>
-                Lima Central<br>
+                RUC: 20603037937<br>
+                Pj. Antonio Bazo Nro. 139 Int. 4<br>
                 TELF: 111-1111
             </div>
         </div>

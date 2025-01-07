@@ -1,255 +1,388 @@
 <template>
-    <div class="container mx-auto p-4">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold">Gestión de Clientes</h2>
-        <button @click="showModalCreate" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">
-          <i class="fas fa-plus mr-2"></i> Nuevo Cliente
-        </button>
+  <div class="data-table-container">
+    <h2 class="title">Gestión de Clientes</h2>
+
+    <!-- Tabla de clientes -->
+    <div class="table-container">
+      <div class="search-container">
+        <input 
+          v-model="searchTerm"
+          type="text"
+          placeholder="Buscar clientes..."
+          class="search-input"
+        />
       </div>
-  
-      <!-- Tabla de clientes -->
-      <div class="bg-white rounded-lg shadow">
-        <div class="p-4 border-b">
-          <div class="flex justify-between items-center">
+
+      <table>
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>DNI/RUC</th>
+            <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(cliente, index) in clientesFiltrados" :key="cliente.ID">
+            <td>{{ index + 1 }}</td>
+            <td>{{ cliente.DNI || 'Cliente General' }}</td>
+            <td>{{ cliente.Nombre || '-' }}</td>
+            <td>{{ cliente.Apellido_Pat || '-' }}</td>
+            <td>{{ cliente.Apellido_Mat || '-' }}</td>
+            <td>
+              <button @click="showModalEdit(cliente)" class="edit-button">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button @click="confirmarEliminar(cliente)" class="delete-button">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal de creación/edición -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <h3>{{ editMode ? 'Editar Cliente' : 'Nuevo Cliente' }}</h3>
+        <div class="icon-container">
+          <i class="fas fa-user-circle person-icon"></i>
+        </div>
+
+        <form @submit.prevent="submitForm">
+          <div class="form-group">
+            <label>DNI/RUC:</label>
             <input 
-              v-model="searchTerm"
+              v-model="formData.DNI" 
               type="text"
-              placeholder="Buscar clientes..."
-              class="p-2 border rounded w-1/3"
+              :disabled="editMode"
             />
           </div>
-        </div>
-  
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DNI/RUC</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido Paterno</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apellido Materno</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="cliente in clientesFiltrados" :key="cliente.ID">
-                <td class="px-6 py-4 whitespace-nowrap">{{ cliente.DNI || 'Cliente General' }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">{{ cliente.Nombre || '-' }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">{{ cliente.Apellido_Pat || '-' }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">{{ cliente.Apellido_Mat || '-' }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button 
-                    @click="showModalEdit(cliente)" 
-                    class="text-indigo-600 hover:text-indigo-900 mr-3"
-                  >
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button 
-                    @click="confirmarEliminar(cliente)" 
-                    class="text-red-600 hover:text-red-900"
-                  >
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-  
-      <!-- Modal de creación/edición -->
-      <div v-if="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-medium">{{ editMode ? 'Editar Cliente' : 'Nuevo Cliente' }}</h3>
-            <button @click="closeModal" class="text-gray-600 hover:text-gray-900">
-              <i class="fas fa-times"></i>
+
+          <div class="form-group">
+            <label>Nombre:</label>
+            <input 
+              v-model="formData.Nombre" 
+              type="text"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Apellido Paterno:</label>
+            <input 
+              v-model="formData.Apellido_Pat" 
+              type="text"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Apellido Materno:</label>
+            <input 
+              v-model="formData.Apellido_Mat" 
+              type="text"
+            />
+          </div>
+
+          <div class="modal-footer">
+            <button 
+              type="button" 
+              @click="closeModal"
+              class="cancel-button"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="submit"
+              class="submit-button"
+            >
+              {{ editMode ? 'Actualizar' : 'Crear' }}
             </button>
           </div>
-  
-          <form @submit.prevent="submitForm">
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">DNI/RUC:</label>
-              <input 
-                v-model="formData.DNI" 
-                type="text"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                :disabled="editMode"
-              />
-            </div>
-  
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Nombre:</label>
-              <input 
-                v-model="formData.Nombre" 
-                type="text"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-  
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Apellido Paterno:</label>
-              <input 
-                v-model="formData.Apellido_Pat" 
-                type="text"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-  
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Apellido Materno:</label>
-              <input 
-                v-model="formData.Apellido_Mat" 
-                type="text"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-  
-            <div class="flex justify-end">
-              <button 
-                type="button" 
-                @click="closeModal"
-                class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600"
-              >
-                Cancelar
-              </button>
-              <button 
-                type="submit"
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                {{ editMode ? 'Actualizar' : 'Crear' }}
-              </button>
-            </div>
-          </form>
-        </div>
+        </form>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    name: 'Cliente',
-    data() {
-      return {
-        clientes: [],
-        showModal: false,
-        editMode: false,
-        searchTerm: '',
-        formData: {
-          DNI: '',
-          Nombre: '',
-          Apellido_Pat: '',
-          Apellido_Mat: ''
-        },
-        selectedCliente: null
+
+    <!-- Botón para agregar cliente -->
+    <button @click="showModalCreate" class="add-button">
+      <i class="fas fa-plus"></i> Agregar Cliente
+    </button>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'Cliente',
+  data() {
+    return {
+      clientes: [],
+      showModal: false,
+      editMode: false,
+      searchTerm: '',
+      formData: {
+        DNI: '',
+        Nombre: '',
+        Apellido_Pat: '',
+        Apellido_Mat: ''
+      },
+      selectedCliente: null
+    }
+  },
+
+  computed: {
+    clientesFiltrados() {
+      if (!this.searchTerm) return this.clientes;
+      
+      const termLower = this.searchTerm.toLowerCase();
+      return this.clientes.filter(cliente => 
+        (cliente.DNI && cliente.DNI.toLowerCase().includes(termLower)) ||
+        (cliente.Nombre && cliente.Nombre.toLowerCase().includes(termLower)) ||
+        (cliente.Apellido_Pat && cliente.Apellido_Pat.toLowerCase().includes(termLower)) ||
+        (cliente.Apellido_Mat && cliente.Apellido_Mat.toLowerCase().includes(termLower))
+      );
+    }
+  },
+
+  methods: {
+    async cargarClientes() {
+      try {
+        const response = await axios.get('/clientes');
+        this.clientes = response.data;
+      } catch (error) {
+        console.error('Error al cargar clientes:', error);
+        alert('Error al cargar los clientes');
       }
     },
-  
-    computed: {
-      clientesFiltrados() {
-        if (!this.searchTerm) return this.clientes;
-        
-        const termLower = this.searchTerm.toLowerCase();
-        return this.clientes.filter(cliente => 
-          (cliente.DNI && cliente.DNI.toLowerCase().includes(termLower)) ||
-          (cliente.Nombre && cliente.Nombre.toLowerCase().includes(termLower)) ||
-          (cliente.Apellido_Pat && cliente.Apellido_Pat.toLowerCase().includes(termLower)) ||
-          (cliente.Apellido_Mat && cliente.Apellido_Mat.toLowerCase().includes(termLower))
-        );
-      }
+
+    showModalCreate() {
+      this.editMode = false;
+      this.formData = {
+        DNI: '',
+        Nombre: '',
+        Apellido_Pat: '',
+        Apellido_Mat: ''
+      };
+      this.showModal = true;
     },
-  
-    methods: {
-      async cargarClientes() {
-        try {
-          const response = await axios.get('/clientes');
-          this.clientes = response.data;
-        } catch (error) {
-          console.error('Error al cargar clientes:', error);
-          alert('Error al cargar los clientes');
+
+    showModalEdit(cliente) {
+      this.editMode = true;
+      this.selectedCliente = cliente;
+      this.formData = { ...cliente };
+      this.showModal = true;
+    },
+
+    closeModal() {
+      this.showModal = false;
+      this.formData = {
+        DNI: '',
+        Nombre: '',
+        Apellido_Pat: '',
+        Apellido_Mat: ''
+      };
+      this.selectedCliente = null;
+    },
+
+    async submitForm() {
+      try {
+        if (this.editMode) {
+          await axios.put(`/clientes/${this.selectedCliente.ID}`, this.formData);
+        } else {
+          await axios.post('/clientes', this.formData);
         }
-      },
-  
-      showModalCreate() {
-        this.editMode = false;
-        this.formData = {
-          DNI: '',
-          Nombre: '',
-          Apellido_Pat: '',
-          Apellido_Mat: ''
-        };
-        this.showModal = true;
-      },
-  
-      showModalEdit(cliente) {
-        this.editMode = true;
-        this.selectedCliente = cliente;
-        this.formData = { ...cliente };
-        this.showModal = true;
-      },
-  
-      closeModal() {
-        this.showModal = false;
-        this.formData = {
-          DNI: '',
-          Nombre: '',
-          Apellido_Pat: '',
-          Apellido_Mat: ''
-        };
-        this.selectedCliente = null;
-      },
-  
-      async submitForm() {
+        
+        await this.cargarClientes();
+        this.closeModal();
+        alert(this.editMode ? 'Cliente actualizado exitosamente' : 'Cliente creado exitosamente');
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al procesar el cliente');
+      }
+    },
+
+    async confirmarEliminar(cliente) {
+      if (confirm('¿Está seguro de eliminar este cliente?')) {
         try {
-          if (this.editMode) {
-            await axios.put(`/clientes/${this.selectedCliente.ID}`, this.formData);
-          } else {
-            await axios.post('/clientes', this.formData);
-          }
-          
+          await axios.delete(`/clientes/${cliente.ID}`);
           await this.cargarClientes();
-          this.closeModal();
-          alert(this.editMode ? 'Cliente actualizado exitosamente' : 'Cliente creado exitosamente');
+          alert('Cliente eliminado exitosamente');
         } catch (error) {
           console.error('Error:', error);
-          alert('Error al procesar el cliente');
-        }
-      },
-  
-      async confirmarEliminar(cliente) {
-        if (confirm('¿Está seguro de eliminar este cliente?')) {
-          try {
-            await axios.delete(`/clientes/${cliente.ID}`);
-            await this.cargarClientes();
-            alert('Cliente eliminado exitosamente');
-          } catch (error) {
-            console.error('Error:', error);
-            alert('Error al eliminar el cliente');
-          }
+          alert('Error al eliminar el cliente');
         }
       }
-    },
-  
-    mounted() {
-      this.cargarClientes();
     }
+  },
+
+  mounted() {
+    this.cargarClientes();
   }
-  </script>
-  
-  <style scoped>
-  .loader {
-    border: 4px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 4px solid #3498db;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  </style>
+}
+</script>
+
+<style scoped>
+/* Estilos para el título */
+.title {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Estilos para el contenedor principal */
+.data-table-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Estilos para la búsqueda */
+.search-container {
+  margin-bottom: 10px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Estilos para la tabla */
+.table-container {
+  margin-top: 30px;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #ddd;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px 10px;  /* Reducido de 12px 15px */
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;    /* Añadido para reducir el tamaño del texto */
+}
+
+th {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Estilos para los botones de acción */
+.edit-button, .delete-button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.edit-button {
+  color: #4caf50;
+}
+
+.delete-button {
+  color: #f44336;
+}
+
+/* Estilos del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Contenedor de icono */
+.icon-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.person-icon {
+  font-size: 60px;
+  color: #333;
+}
+
+/* Estilos del formulario */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Estilos de los botones del modal */
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Botón de agregar */
+.add-button {
+  background-color: #0047AB;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

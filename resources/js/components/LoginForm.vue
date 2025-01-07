@@ -1,8 +1,10 @@
 <template>
     <div class="flex items-center justify-center min-h-screen bg-custom-pattern">
         <div class="container mx-auto p-4">
-            <div class="text-center mb-6">
-                <img src="/images/logo_c.png" alt="Logo" class="mx-auto w-28 h-28">
+            <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-center">
+                    <logo-andreatex container-class="w-64 h-24" />
+                </div>
             </div>
             <form @submit.prevent="submitLogin" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <div class="form__group mb-4">
@@ -35,7 +37,7 @@
                 <button 
                     type="submit" 
                     class="text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" 
-                    style="background-color: #A62103;">
+                    style="background-color: #0047AB;">
                     Iniciar sesión
                 </button>
             </form>
@@ -46,6 +48,7 @@
 
 <script>
 import axios from 'axios';
+import LogoAndreatex from './LogoAndreatex.vue'
 
 export default {
     data() {
@@ -56,6 +59,11 @@ export default {
             error: null,
         };
     },
+
+    components: {
+        LogoAndreatex
+    },
+
     methods: {
         togglePassword() {
             this.showPassword = !this.showPassword;
@@ -173,14 +181,14 @@ export default {
 .form__field:focus {
     padding-bottom: 6px;
     border-width: 3px;
-    border-image: linear-gradient(to right, #A62103, #F2C744);
+    border-image: linear-gradient(to right, #0047AB, #c5d0ff);
     border-image-slice: 1;
 }
 
 .form__field:focus ~ .form__label {
     top: 0;
     font-size: 17px;
-    color: #F2C744;
+    color: #c5d0ff;
     font-weight: 700;
 }
 

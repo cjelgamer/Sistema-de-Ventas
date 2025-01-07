@@ -1,7 +1,10 @@
 <template>
     <div class="dashboard flex flex-col min-h-screen">
         <header class="dashboard-header">
-            <img src="/images/logo_c.png" alt="Logo Botica" class="logo" @click="$router.push('/admin-dashboard')" style="cursor: pointer;">
+            <logo-andreatex 
+                container-class="w-40 h-16 cursor-pointer" 
+                @click="$router.push('/admin-dashboard')"
+            />
             
             <nav class="dashboard-nav">
                 <button @click="$router.push({ path: '/admin-dashboard/vendedores' })">Vendedores</button>
@@ -198,11 +201,13 @@
 <script>
 import Calculator from '@/components/Calculadora.vue';
 import FormularioMedicamento from '@/components/FormularioMedicamento.vue';  // Usando alias '@' para acceder a 'src/components'
+import LogoAndreatex from './LogoAndreatex.vue'
 export default {
     
     components: {
         Calculator,
-        FormularioMedicamento
+        FormularioMedicamento,
+        LogoAndreatex
     },
 
     data() {
@@ -358,7 +363,7 @@ export default {
 }
 
 .dashboard-header .dashboard-nav button.active {
-    background-color: #A62103;
+    background-color: #0047AB;
     color: white;
     box-shadow: 0 2px 4px rgba(155, 155, 155, 0.681);
 }
@@ -389,7 +394,7 @@ export default {
 }
 
 .sub-header button.active {
-    background-color: #A62103;
+    background-color: #0047AB;
     color: white;
     opacity: 1;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -401,7 +406,7 @@ export default {
 }
 
 .publish-button {
-  background-color: #A62103;
+  background-color: #0047AB;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -437,7 +442,7 @@ export default {
 }
 
 .user-options i:hover {
-    color: #A62103;
+    color: #0047AB;
     transform: scale(1.1);
 }
 
@@ -502,7 +507,7 @@ export default {
 }
 
 .publish-button:hover {
-    background-color: #A62103;
+    background-color: #0047AB;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
 }
@@ -523,7 +528,7 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: #333;
-    border-bottom: 2px solid #A62103;
+    border-bottom: 2px solid #0047AB;
     padding-bottom: 8px;
 }
 
@@ -552,7 +557,7 @@ export default {
 }
 
 .faq-section ul li a:hover {
-    color: #A62103;
+    color: #0047AB;
 }
 
 @media (max-width: 768px) {

@@ -292,7 +292,7 @@ export default {
 
 .operation {
   font-size: 14px;
-  color: #A62103;
+  color: #0047AB;
   min-height: 20px;
   text-align: right;
   margin-bottom: 5px;
@@ -345,7 +345,7 @@ export default {
 }
 
 .operation-btn {
-  color: #A62103 !important;
+  color: #0047AB !important;
   font-weight: 600 !important;
   background: #fff !important;
 }
@@ -355,12 +355,12 @@ export default {
 }
 
 .bg-red {
-  background: #A62103 !important;
+  background: #0047AB !important;
   color: white !important;
 }
 
 .bg-red:hover {
-  background: #8a1c02 !important;
+  background: #074cac !important;
 }
 
 .bg-green {
@@ -383,11 +383,11 @@ export default {
 }
 
 .notes-section h3 {
-  color: #A62103;
+  color: #0047AB;
   margin-bottom: 20px;
   font-size: 1.5rem;
   font-weight: 600;
-  border-bottom: 2px solid #F2C744;
+  border-bottom: 2px solid #0047AB;
   padding-bottom: 8px;
 }
 
@@ -407,8 +407,8 @@ export default {
 
 .daily-note-input:focus {
   outline: none;
-  border-color: #F2C744;
-  box-shadow: 0 0 0 3px rgba(242, 199, 68, 0.2);
+  border-color: #0047AB;
+  box-shadow: 0 0 0 3px rgba(82, 162, 232, 0.2);
   background: #fff;
 }
 
@@ -442,7 +442,7 @@ export default {
 
 .note-date {
   font-size: 12px;
-  color: #A62103;
+  color: #0047AB;
   margin-top: 5px;
   opacity: 0.8;
 }
@@ -489,13 +489,13 @@ export default {
 }
 
 .delete-btn {
-  background: #A62103;
+  background: #0047AB;
   color: white;
   flex: 1;
 }
 
 .delete-btn:hover {
-  background: #8a1c02;
+  background: #0047AB;
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(166, 33, 3, 0.15);
 }
@@ -514,7 +514,7 @@ export default {
 
 .edit-note-input:focus {
   outline: none;
-  border-color: #A62103;
+  border-color: #0047AB;
   box-shadow: 0 0 0 3px rgba(166, 33, 3, 0.1);
 }
 
@@ -523,7 +523,7 @@ export default {
   padding: 12px;
   border: none;
   border-radius: 12px;
-  background: #A62103;
+  background: #0047AB;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -532,7 +532,7 @@ export default {
 }
 
 .save-daily-note-btn:hover {
-  background: #8a1c02;
+  background: #034095;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(166, 33, 3, 0.2);
 }
