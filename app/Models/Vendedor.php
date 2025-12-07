@@ -9,8 +9,9 @@ class Vendedor extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'vendedor';
+    protected $table = 'Vendedor';
     protected $primaryKey = 'ID'; // Asegúrate de que coincida con tu columna de ID
+    public $timestamps = false; // Desactivar timestamps ya que la tabla no tiene created_at/updated_at
 
     protected $fillable = [
         'Nombre', 'Telefono', 'Estado', 'Rol', 'Contraseña',

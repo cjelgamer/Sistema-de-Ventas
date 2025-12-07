@@ -9,7 +9,7 @@ class Laboratorio extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'laboratorio';
+    protected $table = 'Laboratorio';
     protected $primaryKey = 'ID';  // Clave primaria si no es 'id'
     public $timestamps = false;    // Si no tienes los campos 'created_at' y 'updated_at'
 

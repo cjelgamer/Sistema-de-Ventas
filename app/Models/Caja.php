@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Caja extends Model
 {
     protected $table = 'Caja';
+    protected $primaryKey = 'ID';
+    public $timestamps = false;
     
     protected $fillable = [
         'Fecha',

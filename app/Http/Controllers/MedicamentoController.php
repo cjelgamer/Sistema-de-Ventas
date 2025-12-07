@@ -7,11 +7,22 @@ use Illuminate\Http\Request;
 
 class MedicamentoController extends Controller
 {
-    // Listar medicamentos
-    public function index()
+    // Listar medicamentos con búsqueda opcional
+    public function index(Request $request)
     {
-        $medicamentos = Medicamento::all();
-        return response()->json($medicamentos);
+        $query = Medicamento::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('Nombre', 'like', '%' . $search . '%')
+                  ->orWhere('Descripcion', 'like', '%' . $search . '%');
+        }
+
+        if ($request->has('limit')) {
+            $query->limit($request->input('limit'));
+        }
+
+        return response()->json($query->get());
     }
 
     // Mostrar un medicamento

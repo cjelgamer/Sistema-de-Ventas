@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 
 class VendedorSimple extends Model
 {
-    protected $table = 'vendedor'; // Nombre de la tabla
+    protected $table = 'Vendedor'; // Nombre de la tabla
     protected $primaryKey = 'ID';  // Clave primaria si no es 'id'
     public $timestamps = false;    // Si no tienes los campos 'created_at' y 'updated_at'
 

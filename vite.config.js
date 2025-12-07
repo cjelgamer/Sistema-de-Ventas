@@ -3,9 +3,22 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            host: 'localhost',
+            protocol: 'ws',
+        },
+        watch: {
+            usePolling: true,
+        },
+    },
     resolve: {
         alias: {
-            'vue': 'vue/dist/vue.esm-bundler.js', // Agrega esta línea
+            'vue': 'vue/dist/vue.esm-bundler.js',
+            '@': '/resources/js',
         },
     },
     plugins: [

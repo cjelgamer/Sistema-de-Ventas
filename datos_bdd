@@ -1,4 +1,5 @@
-INSERT INTO cliente (DNI, Nombre, Apellido_Pat, Apellido_Mat) 
+-- Active: 1755271296512@@127.0.0.1@3306@botica1
+INSERT INTO Cliente (DNI, Nombre, Apellido_Pat, Apellido_Mat) 
 VALUES (NULL, NULL, NULL, NULL);
 
 INSERT INTO Medicamento (Nombre, Descripcion, Precio, Stock, Tipo)
